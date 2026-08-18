@@ -1,0 +1,65 @@
+@import "variables.less";
+
+:root {
+  --green: @green;
+  --white: @white;
+  --orange: @orange;
+  --ink: @ink;
+  --page: @paper;
+  --line: @line;
+  --font-ui: var(--font-plus-jakarta), "Plus Jakarta Sans", sans-serif;
+  --font-display: var(--font-fraunces), Fraunces, serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  background: @paper;
+  color: @ink;
+  font-family: var(--font-ui);
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: @green;
+  text-decoration: none;
+}
+
+a:hover {
+  color: @orange;
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: @ink;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}

@@ -1,0 +1,115 @@
+.id-stage {
+  display: grid;
+  justify-items: center;
+}
+
+.id-card {
+  width: min(390px, 100%);
+  background: @white;
+  border: 1px solid @line;
+  border-radius: 12px;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+}
+
+.id-header {
+  background: @green;
+  color: @white;
+  padding: 22px 24px 18px;
+  display: grid;
+  gap: 6px;
+}
+
+.id-header p {
+  margin: 0;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.id-header h2 {
+  margin: 0;
+  color: @white;
+  font-size: 1.35rem;
+}
+
+.id-body {
+  display: grid;
+  grid-template-columns: 132px 1fr;
+  gap: 18px;
+  padding: 22px 22px 10px;
+  align-items: start;
+}
+
+.id-photo {
+  width: 132px;
+  height: 164px;
+  object-fit: cover;
+  border: 1px solid @line;
+  border-radius: 8px;
+  background: @paper;
+}
+
+.id-facts {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.id-name {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.id-code {
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: @green;
+}
+
+.id-field {
+  display: grid;
+  gap: 2px;
+}
+
+.id-field span {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: @green;
+  font-weight: 700;
+}
+
+.id-field strong {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.id-footer {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: end;
+  padding: 8px 22px 20px;
+}
+
+.id-footer p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.id-qr {
+  width: 108px;
+  height: 108px;
+  border: 1px solid @line;
+  border-radius: 8px;
+}
+
+.id-accent {
+  height: 10px;
+  background: @orange;
+}

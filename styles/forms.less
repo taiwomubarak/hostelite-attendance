@@ -1,0 +1,138 @@
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 24px 32px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.form-grid .field {
+  grid-column: span 6;
+}
+
+.form-grid .field.wide {
+  grid-column: span 12;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid @line;
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 1.05rem;
+  font-weight: 500;
+  background: @white;
+  color: @ink;
+}
+
+.field input:focus,
+.field select:focus {
+  outline: 2px solid @green;
+  outline-offset: 1px;
+}
+
+.actions {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: start;
+  gap: 12px;
+}
+
+.btn {
+  display: inline-grid;
+  grid-auto-flow: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 14px 22px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: @green;
+  color: @white;
+}
+
+.btn:hover {
+  background: @ink;
+  color: @white;
+}
+
+.btn-orange {
+  background: @orange;
+  color: @white;
+}
+
+.btn-orange:hover {
+  background: @ink;
+}
+
+.btn-ghost {
+  background: @white;
+  color: @green;
+  border-color: @green;
+}
+
+.btn-ghost:hover {
+  background: @green;
+  color: @white;
+}
+
+.btn-text {
+  background: transparent;
+  color: @orange;
+  border: 0;
+  padding: 8px 0;
+}
+
+.file-btn {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: center;
+  border: 1px dashed @green;
+  border-radius: 12px;
+  padding: 18px 20px;
+  background: @white;
+}
+
+.file-btn input {
+  width: 100%;
+}
+
+.error-banner {
+  background: @white;
+  border: 1px solid @orange;
+  color: @orange;
+  border-radius: 12px;
+  padding: 16px 18px;
+  font-weight: 700;
+}
+
+.photo-preview {
+  width: 120px;
+  height: 150px;
+  object-fit: cover;
+  border: 1px solid @line;
+  border-radius: 8px;
+}
+
+@media (max-width: 700px) {
+  .form-grid .field,
+  .form-grid .field.wide {
+    grid-column: 1 / -1;
+  }
+
+  .actions {
+    grid-auto-flow: row;
+  }
+}
