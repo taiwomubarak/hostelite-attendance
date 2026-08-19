@@ -1,3 +1,4 @@
+import { put } from "@vercel/blob"
 import { randomBytes } from "crypto"
 import { mkdir, writeFile } from "fs/promises"
 import path from "path"
@@ -25,6 +26,16 @@ function sniffExt(bytes: Buffer) {
   return null
 }
 
+function contentType(ext: string) {
+  if (ext === "jpg") {
+    return "image/jpeg"
+  }
+  if (ext === "png") {
+    return "image/png"
+  }
+  return "image/webp"
+}
+
 export async function saveStudentPhoto(file: File) {
   if (file.size > 5 * 1024 * 1024) {
     throw new Error("Photo must be 5 MB or smaller")
@@ -36,9 +47,19 @@ export async function saveStudentPhoto(file: File) {
     throw new Error("Photo must be a JPG, PNG, or WEBP file")
   }
 
+  const filename = `${randomBytes(16).toString("hex")}.${ext}`
+
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    const blob = await put(`students/${filename}`, bytes, {
+      access: "public",
+      contentType: contentType(ext),
+      token: process.env.BLOB_READ_WRITE_TOKEN
+    })
+    return blob.url
+  }
+
   const dir = path.join(process.cwd(), "public", "uploads")
   await mkdir(dir, { recursive: true })
-  const filename = `${randomBytes(16).toString("hex")}.${ext}`
   await writeFile(path.join(dir, filename), bytes)
   return `/uploads/${filename}`
 }

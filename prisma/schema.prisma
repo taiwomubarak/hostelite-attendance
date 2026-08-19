@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Admin {
@@ -14,17 +15,17 @@ model Admin {
 }
 
 model Student {
-  id             String       @id @default(cuid())
-  code           String       @unique
-  name           String
-  imagePath      String
-  sex            String
-  age            Int
-  room           String
-  academicLevel  Int
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  attendance     Attendance[]
+  id            String       @id @default(cuid())
+  code          String       @unique
+  name          String
+  imagePath     String
+  sex           String
+  age           Int
+  room          String
+  academicLevel Int
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  attendance    Attendance[]
 }
 
 model Attendance {
