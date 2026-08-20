@@ -15,8 +15,17 @@ export default async function ResultPage({
   params: Promise<{ code: string }>
   searchParams: Promise<{ status?: string; from?: string; t?: string }>
 }) {
-  const { code } = await params
-  const query = await searchParams
+  let code: string
+  let query: { status?: string; from?: string; t?: string }
+
+  try {
+    const p = await params
+    code = p.code
+    query = await searchParams
+  } catch {
+    redirect("/unknown")
+  }
+
   const token = String(query.t ?? "")
   if (!token || !verifyScanToken(token, code)) {
     redirect("/unknown")

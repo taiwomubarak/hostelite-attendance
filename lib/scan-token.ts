@@ -1,4 +1,4 @@
-import { createHmac, timingSafeEqual } from "crypto"
+import { createHmac, timingSafeEqual } from "node:crypto"
 
 function secret() {
   const value = process.env.AUTH_SECRET

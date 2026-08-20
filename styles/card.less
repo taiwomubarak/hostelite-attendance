@@ -4,71 +4,92 @@
 }
 
 .id-card {
-  width: min(390px, 100%);
+  width: min(400px, 100%);
   background: @white;
   border: 1px solid @line;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
   display: grid;
-  grid-template-rows: auto 1fr auto auto;
+}
+
+.id-top-bar {
+  height: 8px;
+  background: @green;
 }
 
 .id-header {
-  background: @green;
-  color: @white;
-  padding: 22px 24px 18px;
-  display: grid;
-  gap: 6px;
+  padding: 20px 28px 16px;
+  text-align: center;
+  border-bottom: 1px solid @line;
 }
 
-.id-header p {
+.id-brand {
   margin: 0;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  color: @green;
+  font-size: 1.7rem;
+  letter-spacing: 0.02em;
+}
+
+.id-sub {
+  margin: 4px 0 0;
   font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: @ink;
   font-weight: 700;
-}
-
-.id-header h2 {
-  margin: 0;
-  color: @white;
-  font-size: 1.35rem;
 }
 
 .id-body {
   display: grid;
-  grid-template-columns: 132px 1fr;
-  gap: 18px;
-  padding: 22px 22px 10px;
+  grid-template-columns: 120px 1fr;
+  gap: 20px;
+  padding: 24px 28px 20px;
   align-items: start;
 }
 
+.id-photo-wrap {
+  border: 3px solid @green;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
 .id-photo {
-  width: 132px;
-  height: 164px;
+  display: block;
+  width: 120px;
+  height: 150px;
   object-fit: cover;
-  border: 1px solid @line;
-  border-radius: 8px;
   background: @paper;
 }
 
-.id-facts {
+.id-info {
   display: grid;
-  gap: 10px;
+  gap: 12px;
   align-content: start;
 }
 
 .id-name {
   margin: 0;
-  font-size: 2rem;
-  line-height: 1.1;
+  font-size: 1.6rem;
+  line-height: 1.15;
+  color: @ink;
 }
 
 .id-code {
   margin: 0;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
   color: @green;
+  background: @paper;
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.id-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 16px;
 }
 
 .id-field {
@@ -77,39 +98,60 @@
 }
 
 .id-field span {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: @green;
   font-weight: 700;
 }
 
 .id-field strong {
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 600;
+  color: @ink;
 }
 
 .id-footer {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 12px;
-  align-items: end;
-  padding: 8px 22px 20px;
-}
-
-.id-footer p {
-  margin: 0;
-  font-size: 0.95rem;
+  justify-items: center;
+  gap: 8px;
+  padding: 12px 28px 20px;
+  border-top: 1px solid @line;
 }
 
 .id-qr {
-  width: 108px;
-  height: 108px;
+  width: 100px;
+  height: 100px;
   border: 1px solid @line;
   border-radius: 8px;
 }
 
-.id-accent {
-  height: 10px;
+.id-scan-hint {
+  margin: 0;
+  font-size: 0.78rem;
+  color: @ink;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+
+.id-bottom-bar {
+  height: 8px;
   background: @orange;
+}
+
+@media (max-width: 400px) {
+  .id-body {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .id-info {
+    justify-items: center;
+  }
+
+  .id-fields {
+    justify-items: center;
+    text-align: center;
+  }
 }
