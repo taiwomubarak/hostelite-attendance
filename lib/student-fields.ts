@@ -19,8 +19,8 @@ export function parseStudentFields(formData: FormData): ParsedStudent | { error:
   if (sex !== "Male" && sex !== "Female") {
     return { error: "Sex must be Male or Female" }
   }
-  if (!Number.isInteger(age) || age < 10 || age > 80) {
-    return { error: "Age must be a number between 10 and 80" }
+  if (!Number.isInteger(age) || age < 1 || age > 120) {
+    return { error: "Age must be a number between 1 and 120" }
   }
   if (!room) {
     return { error: "Room is required" }

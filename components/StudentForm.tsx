@@ -71,7 +71,7 @@ export default function StudentForm({ student }: StudentFormProps) {
         </label>
         <label className="field">
           Age
-          <input name="age" type="number" min={10} max={80} defaultValue={student?.age ?? 18} required />
+          <input name="age" type="number" min={1} max={120} defaultValue={student?.age ?? 18} required />
         </label>
         <label className="field">
           Academic Level
