@@ -1,5 +1,3 @@
-import { looksLikePasswordHash } from "@/lib/password"
-
 const WEAK_SECRETS = new Set([
   "",
   "changeme",
@@ -17,6 +15,10 @@ function normalizeOrigin(value: string) {
     return trimmed
   }
   return `https://${trimmed}`
+}
+
+function looksLikePasswordHash(value: string) {
+  return /^sha256\$[a-f0-9]{32}\$[a-f0-9]{64}$/i.test(value)
 }
 
 export function resolveAuthUrl() {

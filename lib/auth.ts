@@ -1,6 +1,6 @@
+import { timingSafeEqual } from "node:crypto"
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
-import { timingSafeEqual } from "crypto"
 import { looksLikePasswordHash, verifyPassword } from "@/lib/password"
 
 const production = process.env.NODE_ENV === "production"
