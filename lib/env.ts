@@ -6,15 +6,30 @@ const WEAK_SECRETS = new Set([
   "generate-a-random-string-at-least-32-chars"
 ])
 
+function normalizeOrigin(value: string) {
+  const trimmed = value.trim().replace(/\/$/, "")
+  if (!trimmed) {
+    return ""
+  }
+  if (trimmed.startsWith("https://") || trimmed.startsWith("http://")) {
+    return trimmed
+  }
+  return `https://${trimmed}`
+}
+
 export function resolveAuthUrl() {
-  const configured = (process.env.AUTH_URL || "").trim().replace(/\/$/, "")
-  if (configured) {
+  const configured = normalizeOrigin(process.env.AUTH_URL || "")
+  if (configured.startsWith("https://") || configured.startsWith("http://localhost")) {
     return configured
   }
 
-  const vercel = (process.env.VERCEL_URL || "").trim().replace(/\/$/, "")
+  const vercel = normalizeOrigin(process.env.VERCEL_URL || "")
   if (vercel) {
-    return `https://${vercel}`
+    return vercel.startsWith("http") ? vercel : `https://${vercel.replace(/^https?:\/\//, "")}`
+  }
+
+  if (configured) {
+    return configured
   }
 
   return "http://localhost:3000"
@@ -31,13 +46,7 @@ export function assertProductionEnv() {
   }
 
   const authUrl = resolveAuthUrl()
-  if (!process.env.AUTH_URL) {
-    process.env.AUTH_URL = authUrl
-  }
-
-  if (!authUrl.startsWith("https://") && !authUrl.startsWith("http://localhost")) {
-    throw new Error("Set AUTH_URL to your https origin")
-  }
+  process.env.AUTH_URL = authUrl
 }
 
 export function isProduction() {
