@@ -49,7 +49,7 @@ In Vercel: Project Settings, Environment Variables. Apply them to Production and
 | `DATABASE_URL` | `postgresql://...@.../neondb?sslmode=require` | Pooled URL if you have one |
 | `DIRECT_URL` | `postgresql://...@.../neondb?sslmode=require` | Direct URL. Same as `DATABASE_URL` if you only have one |
 | `AUTH_SECRET` | 64 random characters | Required. Production refuses short or known placeholder values |
-| `AUTH_URL` | `https://your-app.vercel.app` | Your live origin. Update again if you add a custom domain |
+| `AUTH_URL` | `https://your-app.vercel.app` | Your live origin. If omitted on Vercel, the app uses `https://$VERCEL_URL`. Set it when you add a custom domain. |
 | `ADMIN_USERNAME` | `admin` | Login name |
 | `ADMIN_PASSWORD` | 12+ character password | Used when you seed. Never `changeme` |
 | `BLOB_READ_WRITE_TOKEN` | from Blob store | Auto-filled if Blob is connected |
