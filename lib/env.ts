@@ -1,3 +1,5 @@
+import { looksLikeBcryptHash } from "@/lib/password"
+
 const WEAK_SECRETS = new Set([
   "",
   "changeme",
@@ -45,9 +47,9 @@ export function assertProductionEnv() {
     throw new Error("Set AUTH_SECRET to a random string of at least 32 characters")
   }
 
-  const adminPassword = process.env.ADMIN_PASSWORD || ""
-  if (adminPassword.length < 12 || WEAK_SECRETS.has(adminPassword) || adminPassword === "changeme") {
-    throw new Error("Set ADMIN_PASSWORD to at least 12 characters")
+  const adminHash = process.env.ADMIN_PASSWORD_HASH || ""
+  if (!looksLikeBcryptHash(adminHash)) {
+    throw new Error("Set ADMIN_PASSWORD_HASH to a bcrypt hash from npm run hash-password")
   }
 
   const authUrl = resolveAuthUrl()

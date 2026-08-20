@@ -51,7 +51,7 @@ In Vercel: Project Settings, Environment Variables. Apply them to Production and
 | `AUTH_SECRET` | 64 random characters | Required. Production refuses short or known placeholder values |
 | `AUTH_URL` | `https://your-app.vercel.app` | Your live origin. If omitted on Vercel, the app uses `https://$VERCEL_URL`. Set it when you add a custom domain. |
 | `ADMIN_USERNAME` | `admin` | Login name |
-| `ADMIN_PASSWORD` | 12+ character password | Used when you seed. Never `changeme` |
+| `ADMIN_PASSWORD_HASH` | `$2a$12$...` | bcrypt hash from `npm run hash-password`. Required in production |
 | `BLOB_READ_WRITE_TOKEN` | from Blob store | Auto-filled if Blob is connected |
 
 Create `AUTH_SECRET` on your computer:
@@ -75,13 +75,24 @@ If migrate fails, `DATABASE_URL` or `DIRECT_URL` is wrong. Check sslmode=require
 
 ## 6. Admin login
 
-Admin login reads `ADMIN_USERNAME` and `ADMIN_PASSWORD` from Vercel environment variables. No database seed is required.
+Production login uses `ADMIN_USERNAME` plus a bcrypt hash in `ADMIN_PASSWORD_HASH`. The plain password is not stored in Vercel.
 
-1. Set both vars in Vercel (Production + Preview)
-2. Redeploy if you just added them
-3. Open `/login` and use those exact values
+Generate the hash on your PC:
 
-`ADMIN_PASSWORD` must be at least 12 characters in production.
+```powershell
+$env:PATH = "C:\Users\DELL\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v24.19.0-win-x64;" + $env:PATH
+cd "C:\Users\DELL\ID card"
+npm run hash-password -- "your-long-password-here"
+```
+
+Copy the printed `$2a$12$...` value into Vercel as `ADMIN_PASSWORD_HASH`.
+
+1. Set `ADMIN_USERNAME` and `ADMIN_PASSWORD_HASH`
+2. Remove plain `ADMIN_PASSWORD` from Production if it is there
+3. Redeploy
+4. Log in with the username and the original plain password (not the hash)
+
+Locally you may still use `ADMIN_PASSWORD` for convenience. Production requires the hash.
 
 ## 7. Local development against the same database
 
@@ -93,6 +104,7 @@ DIRECT_URL="postgresql://..."
 AUTH_SECRET="same-random-secret-or-another-32-plus-chars"
 AUTH_URL="http://localhost:3000"
 ADMIN_USERNAME="admin"
+ADMIN_PASSWORD_HASH=""
 ADMIN_PASSWORD="your-local-password"
 BLOB_READ_WRITE_TOKEN="optional-for-local-photos"
 ```
@@ -122,7 +134,7 @@ Open `http://localhost:3000`. If `BLOB_READ_WRITE_TOKEN` is empty, photos save u
 | `npm run dev` | Local app |
 | `npm run build` | Production build, including migrations |
 | `npm run start` | Serve the production build |
-| `npx prisma migrate deploy` | Apply migrations to the current `DATABASE_URL` |
+| `npm run hash-password -- "secret"` | Print a bcrypt hash for `ADMIN_PASSWORD_HASH` |
 
 ## Files that must never go to Git
 
