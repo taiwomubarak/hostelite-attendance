@@ -41,7 +41,8 @@ export async function POST(request: Request) {
       }
     })
     return NextResponse.json({ ok: true, id: student.id })
-  } catch {
-    return NextResponse.json({ error: "Could not save student" }, { status: 400 })
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Could not save student"
+    return NextResponse.json({ error: msg }, { status: 400 })
   }
 }

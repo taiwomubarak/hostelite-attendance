@@ -58,6 +58,10 @@ export async function saveStudentPhoto(file: File) {
     return blob.url
   }
 
+  if (process.env.VERCEL) {
+    throw new Error("BLOB_READ_WRITE_TOKEN is required for photo uploads on Vercel")
+  }
+
   const dir = path.join(process.cwd(), "public", "uploads")
   await mkdir(dir, { recursive: true })
   await writeFile(path.join(dir, filename), bytes)
