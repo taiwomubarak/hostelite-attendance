@@ -18,7 +18,7 @@ function normalizeOrigin(value: string) {
 }
 
 function looksLikePasswordHash(value: string) {
-  return /^sha256\$[a-f0-9]{32}\$[a-f0-9]{64}$/i.test(value)
+  return /^sha256\.[a-f0-9]{32}\.[a-f0-9]{64}$/i.test(value)
 }
 
 export function resolveAuthUrl() {
@@ -51,7 +51,7 @@ export function assertProductionEnv() {
 
   const adminHash = process.env.ADMIN_PASSWORD_HASH || ""
   if (!looksLikePasswordHash(adminHash)) {
-    throw new Error("Set ADMIN_PASSWORD_HASH to a sha256$salt$digest hash from npm run hash-password")
+    throw new Error("Set ADMIN_PASSWORD_HASH to a sha256.salt.digest hash from npm run hash-password")
   }
 
   const authUrl = resolveAuthUrl()
