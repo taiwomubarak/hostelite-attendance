@@ -1,16 +1,44 @@
-import bcrypt from "bcryptjs"
+import { createHash, randomBytes, timingSafeEqual } from "crypto"
 
-export async function hashPassword(password: string) {
-  return bcrypt.hash(password, 12)
+const HASH_PREFIX = "sha256"
+
+function pepper() {
+  return process.env.ADMIN_PASSWORD_PEPPER || process.env.AUTH_SECRET || ""
 }
 
-export async function verifyPassword(password: string, passwordHash: string) {
-  if (!password || !passwordHash) {
+export function hashPassword(password: string, salt = randomBytes(16).toString("hex")) {
+  const pep = pepper()
+  if (!pep) {
+    throw new Error("Set AUTH_SECRET or ADMIN_PASSWORD_PEPPER before hashing")
+  }
+  const digest = createHash("sha256")
+    .update(pep, "utf8")
+    .update(":")
+    .update(salt, "utf8")
+    .update(":")
+    .update(password, "utf8")
+    .digest("hex")
+  return `${HASH_PREFIX}$${salt}$${digest}`
+}
+
+export function verifyPassword(password: string, stored: string) {
+  if (!password || !stored || !looksLikePasswordHash(stored)) {
     return false
   }
-  return bcrypt.compare(password, passwordHash)
+  const parts = stored.split("$")
+  if (parts.length !== 3 || parts[0] !== HASH_PREFIX) {
+    return false
+  }
+  const [, salt] = parts
+  const expected = hashPassword(password, salt)
+  const left = Buffer.from(expected)
+  const right = Buffer.from(stored)
+  if (left.length !== right.length) {
+    return false
+  }
+  return timingSafeEqual(left, right)
 }
 
-export function looksLikeBcryptHash(value: string) {
-  return /^\$2[aby]?\$\d{2}\$[./A-Za-z0-9]{53}$/.test(value)
+export function looksLikePasswordHash(value: string) {
+  return /^sha256\$[a-f0-9]{32}\$[a-f0-9]{64}$/i.test(value)
 }

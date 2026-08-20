@@ -1,4 +1,4 @@
-import { looksLikeBcryptHash } from "@/lib/password"
+import { looksLikePasswordHash } from "@/lib/password"
 
 const WEAK_SECRETS = new Set([
   "",
@@ -48,8 +48,8 @@ export function assertProductionEnv() {
   }
 
   const adminHash = process.env.ADMIN_PASSWORD_HASH || ""
-  if (!looksLikeBcryptHash(adminHash)) {
-    throw new Error("Set ADMIN_PASSWORD_HASH to a bcrypt hash from npm run hash-password")
+  if (!looksLikePasswordHash(adminHash)) {
+    throw new Error("Set ADMIN_PASSWORD_HASH to a sha256$salt$digest hash from npm run hash-password")
   }
 
   const authUrl = resolveAuthUrl()

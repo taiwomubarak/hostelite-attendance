@@ -51,7 +51,7 @@ In Vercel: Project Settings, Environment Variables. Apply them to Production and
 | `AUTH_SECRET` | 64 random characters | Required. Production refuses short or known placeholder values |
 | `AUTH_URL` | `https://your-app.vercel.app` | Your live origin. If omitted on Vercel, the app uses `https://$VERCEL_URL`. Set it when you add a custom domain. |
 | `ADMIN_USERNAME` | `admin` | Login name |
-| `ADMIN_PASSWORD_HASH` | `$2a$12$...` | bcrypt hash from `npm run hash-password`. Required in production |
+| `ADMIN_PASSWORD_HASH` | `sha256$salt$digest` | From `npm run hash-password` using the same AUTH_SECRET / pepper |
 | `BLOB_READ_WRITE_TOKEN` | from Blob store | Auto-filled if Blob is connected |
 
 Create `AUTH_SECRET` on your computer:
@@ -75,22 +75,27 @@ If migrate fails, `DATABASE_URL` or `DIRECT_URL` is wrong. Check sslmode=require
 
 ## 6. Admin login
 
-Production login uses `ADMIN_USERNAME` plus a bcrypt hash in `ADMIN_PASSWORD_HASH`. The plain password is not stored in Vercel.
+Production login uses SHA-256 with a random salt and a pepper.
 
-Generate the hash on your PC:
+- Pepper = `ADMIN_PASSWORD_PEPPER`, or `AUTH_SECRET` if pepper is not set
+- Stored value = `sha256$<salt>$<digest>` in `ADMIN_PASSWORD_HASH`
+
+Generate the hash on your PC. Use the **same** `AUTH_SECRET` (or pepper) that is on Vercel:
 
 ```powershell
 $env:PATH = "C:\Users\DELL\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v24.19.0-win-x64;" + $env:PATH
 cd "C:\Users\DELL\ID card"
+$env:AUTH_SECRET = "paste-the-same-AUTH_SECRET-from-vercel"
 npm run hash-password -- "your-long-password-here"
 ```
 
-Copy the printed `$2a$12$...` value into Vercel as `ADMIN_PASSWORD_HASH`.
+Copy the printed `sha256$...` value into Vercel as `ADMIN_PASSWORD_HASH`.
 
 1. Set `ADMIN_USERNAME` and `ADMIN_PASSWORD_HASH`
-2. Remove plain `ADMIN_PASSWORD` from Production if it is there
-3. Redeploy
-4. Log in with the username and the original plain password (not the hash)
+2. Keep `AUTH_SECRET` the same as when you generated the hash
+3. Remove plain `ADMIN_PASSWORD` from Production
+4. Redeploy
+5. Log in with the username and the original plain password
 
 Locally you may still use `ADMIN_PASSWORD` for convenience. Production requires the hash.
 

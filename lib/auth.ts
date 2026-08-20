@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { timingSafeEqual } from "crypto"
-import { looksLikeBcryptHash, verifyPassword } from "@/lib/password"
+import { looksLikePasswordHash, verifyPassword } from "@/lib/password"
 
 const production = process.env.NODE_ENV === "production"
 
@@ -44,9 +44,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null
         }
 
-        if (passwordHash && looksLikeBcryptHash(passwordHash)) {
-          const ok = await verifyPassword(password, passwordHash)
-          if (!ok) {
+        if (passwordHash && looksLikePasswordHash(passwordHash)) {
+          if (!verifyPassword(password, passwordHash)) {
             return null
           }
           return { id: "env-admin", name: expectedUser }
