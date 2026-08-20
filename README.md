@@ -73,22 +73,15 @@ After the first deploy, Vercel gives you a URL like `https://hostelite-attendanc
 
 If migrate fails, `DATABASE_URL` or `DIRECT_URL` is wrong. Check sslmode=require and that the database is linked to Production.
 
-## 6. Create the admin user
+## 6. Admin login
 
-Vercel does not run seed by itself. From this project folder, point Prisma at the production database once.
+Admin login reads `ADMIN_USERNAME` and `ADMIN_PASSWORD` from Vercel environment variables. No database seed is required.
 
-```powershell
-$env:PATH = "C:\Users\DELL\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v24.19.0-win-x64;" + $env:PATH
-cd "C:\Users\DELL\ID card"
-$env:DATABASE_URL = "paste-production-DATABASE_URL"
-$env:DIRECT_URL = "paste-production-DIRECT_URL"
-$env:ADMIN_USERNAME = "admin"
-$env:ADMIN_PASSWORD = "your-long-production-password"
-$env:NODE_ENV = "production"
-npx prisma db seed
-```
+1. Set both vars in Vercel (Production + Preview)
+2. Redeploy if you just added them
+3. Open `/login` and use those exact values
 
-Then open `https://your-app.vercel.app/login` with that username and password.
+`ADMIN_PASSWORD` must be at least 12 characters in production.
 
 ## 7. Local development against the same database
 
@@ -108,7 +101,6 @@ BLOB_READ_WRITE_TOKEN="optional-for-local-photos"
 npm install
 npx prisma generate
 npx prisma migrate deploy
-npm run db:seed
 npm run dev
 ```
 
@@ -116,7 +108,7 @@ Open `http://localhost:3000`. If `BLOB_READ_WRITE_TOKEN` is empty, photos save u
 
 ## 8. After go-live
 
-1. Log in at `/login`
+1. Log in at `/login` with the env username and password
 2. Add students with photos
 3. Print or show the on-screen ID card QR
 4. Use `/` as the kiosk scan page
@@ -131,7 +123,6 @@ Open `http://localhost:3000`. If `BLOB_READ_WRITE_TOKEN` is empty, photos save u
 | `npm run build` | Production build, including migrations |
 | `npm run start` | Serve the production build |
 | `npx prisma migrate deploy` | Apply migrations to the current `DATABASE_URL` |
-| `npm run db:seed` | Create or update the admin user |
 
 ## Files that must never go to Git
 

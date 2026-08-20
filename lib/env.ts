@@ -45,6 +45,11 @@ export function assertProductionEnv() {
     throw new Error("Set AUTH_SECRET to a random string of at least 32 characters")
   }
 
+  const adminPassword = process.env.ADMIN_PASSWORD || ""
+  if (adminPassword.length < 12 || WEAK_SECRETS.has(adminPassword) || adminPassword === "changeme") {
+    throw new Error("Set ADMIN_PASSWORD to at least 12 characters")
+  }
+
   const authUrl = resolveAuthUrl()
   process.env.AUTH_URL = authUrl
 }

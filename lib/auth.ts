@@ -1,10 +1,17 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
-import bcrypt from "bcryptjs"
-import { ensureAdmin } from "@/lib/ensure-admin"
-import { prisma } from "@/lib/prisma"
+import { timingSafeEqual } from "crypto"
 
 const production = process.env.NODE_ENV === "production"
+
+function safeEqual(left: string, right: string) {
+  const a = Buffer.from(left)
+  const b = Buffer.from(right)
+  if (a.length !== b.length) {
+    return false
+  }
+  return timingSafeEqual(a, b)
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
@@ -22,24 +29,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        await ensureAdmin()
+        const expectedUser = process.env.ADMIN_USERNAME || "admin"
+        const expectedPass = process.env.ADMIN_PASSWORD || ""
+        if (!expectedPass) {
+          return null
+        }
+
         const username = String(credentials?.username ?? "")
         const password = String(credentials?.password ?? "")
         if (!username || !password) {
           return null
         }
 
-        const admin = await prisma.admin.findUnique({ where: { username } })
-        if (!admin) {
+        const userOk = safeEqual(username, expectedUser)
+        const passOk = safeEqual(password, expectedPass)
+        if (!userOk || !passOk) {
           return null
         }
 
-        const ok = await bcrypt.compare(password, admin.passwordHash)
-        if (!ok) {
-          return null
-        }
-
-        return { id: admin.id, name: admin.username }
+        return { id: "env-admin", name: expectedUser }
       }
     })
   ]
